@@ -15,7 +15,7 @@ class View
         $contentView = self::getContentView($template);
         $keys = array_keys($data);
 
-        $keys = array_map(function($key) {
+        $keys = array_map(function ($key) {
             return '{{' . $key . '}}';
         }, $keys);
 

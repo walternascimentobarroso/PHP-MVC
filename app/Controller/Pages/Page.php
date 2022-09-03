@@ -9,12 +9,12 @@ class Page
 
     public function getHeader()
     {
-      return View::render('templat/header');
+        return View::render('templat/header');
     }
 
     public function getFooter()
     {
-      return View::render('templat/footer');
+        return View::render('templat/footer');
     }
 
     public function getPage($title, $content)
