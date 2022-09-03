@@ -9,3 +9,9 @@ destroy:
 
 build:
 	docker-compose up --build -d
+
+composer:
+	docker-compose exec php_mvc composer install
+
+bash_php: up
+	docker-compose exec php_mvc bash
