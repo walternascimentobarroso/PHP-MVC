@@ -7,23 +7,23 @@ use App\Controller\Utils\View;
 class Page
 {
 
-    public static function getHeader()
+    public function getHeader()
     {
-      return View::render('pages/header');
+      return View::render('templat/header');
     }
 
-    public static function getFooter()
+    public function getFooter()
     {
-      return View::render('pages/footer');
+      return View::render('templat/footer');
     }
 
-    public static function getPage($title, $content)
+    public function getPage($title, $content)
     {
-        return View::render('pages/page', [
+        return View::render('templat/layout', [
             'title' => $title,
-            'header' => self::getHeader(),
+            'header' => $this->getHeader(),
             'content' => $content,
-            'footer' => self::getFooter(),
+            'footer' => $this->getFooter(),
         ]);
     }
 }

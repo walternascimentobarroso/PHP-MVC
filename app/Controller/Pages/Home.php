@@ -3,11 +3,11 @@
 namespace App\Controller\Pages;
 
 use App\Controller\Utils\View;
-use App\Model\Entity\User;
+use App\Model\User;
 
 class Home extends Page
 {
-    public static function getHome()
+    public function getHome()
     {
         $user = new User();
         $content = View::render('pages/home', [
