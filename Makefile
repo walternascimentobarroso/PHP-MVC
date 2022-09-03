@@ -15,3 +15,6 @@ composer:
 
 bash_php: up
 	docker-compose exec php_mvc bash
+
+bash_nginx: up
+	docker-compose exec nginx_mvc bash
