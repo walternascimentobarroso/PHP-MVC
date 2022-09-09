@@ -2,13 +2,19 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use App\Controller\Pages\Home;
+use App\Controller\Http\Router;
+use App\Controller\Utils\View;
 
-$test = new \App\Controller\Http\Response(200, '<h1>Hello World</h1>');
-$test2 = new \App\Controller\Http\Request();
+define('URL', 'http://localhost');
 
-echo ('<pre>');
-var_dump($test);
-var_dump($test2);
+View::init([
+    'URL' => URL
+]);
 
-echo (new Home)->getHome();
+$router = new Router(URL);
+
+// $router->get('/', ['controller' => 'Home', 'action' => 'index']);
+include __DIR__ . '/../routes/pages.php';
+
+
+$router->run()->sendResponse();

@@ -26,8 +26,17 @@ class Response
         $this->headers[$key] = $value;
     }
 
+    public function sendHeaders()
+    {
+        http_response_code($this->statusCode);
+        foreach ($this->headers as $key => $value) {
+            header($key . ': ' . $value);
+        }
+    }
+
     public function sendResponse()
     {
+        $this->sendHeaders();
         switch ($this->contentType) {
             case 'text/html':
                 echo $this->content;
