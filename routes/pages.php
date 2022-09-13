@@ -20,3 +20,33 @@ $router->get('/pagina/{id}', [
         return new Response(200, '10 ' . $id);
     }
 ]);
+
+$router->get('/user', [
+    function ($id) {
+        return (new Pages\UserController)->getAll();
+    }
+]);
+
+$router->get('/user/{id}', [
+    function ($id) {
+        return (new Pages\UserController)->get($id);
+    }
+]);
+
+$router->post('/user', [
+    function ($id) {
+        return (new Pages\UserController)->create();
+    }
+]);
+
+$router->put('/user/{id}', [
+    function ($id) {
+        return (new Pages\UserController)->update($id);
+    }
+]);
+
+$router->delete('/user/{id}', [
+    function ($id) {
+        return (new Pages\UserController)->delete($id);
+    }
+]);

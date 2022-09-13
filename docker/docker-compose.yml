@@ -3,11 +3,11 @@ name: mvc
 services:
   nginx_mvc:
     container_name: nginx_mvc
-    image: nginx:1.17.8
+    image: nginx:1.23.1
     ports:
       - 80:80
     volumes:
-      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ../:/var/www
     links:
       - php_mvc
