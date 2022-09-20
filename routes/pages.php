@@ -22,7 +22,7 @@ $router->get('/pagina/{id}', [
 ]);
 
 $router->get('/user', [
-    function ($id) {
+    function () {
         return (new Pages\UserController)->getAll();
     }
 ]);
