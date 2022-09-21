@@ -3,18 +3,17 @@
 namespace App\Controller\Pages;
 
 use App\Controller\Utils\View;
-use App\Model\User;
+use App\Controller\Http\Response;
 
 class About extends Page
 {
     public function getAbout()
     {
-        $user = new User();
         $content = View::render('pages/about', [
-            'title' => $user->name,
+            'title' => 'Sobre',
             'content' => 'This is the About page.'
         ]);
 
-        return self::getPage('About', $content);
+        return new Response(200, self::getPage('About', $content));
     }
 }

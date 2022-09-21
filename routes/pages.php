@@ -1,25 +1,30 @@
 <?php
 
-use App\Controller\Http\Response;
 use App\Controller\Pages;
+
+use App\Controller\Http\Router;
+
+$router = new Router();
 
 $router->get('/', [
     function () {
-        return new Response(200, (new Pages\Home)->getHome());
+        return (new Pages\Home)->getHome();
     }
 ]);
 
 $router->get('/about', [
     function () {
-        return new Response(200, (new Pages\About)->getAbout());
+        return (new Pages\About)->getAbout();
     }
 ]);
 
 $router->get('/pagina/{id}', [
     function ($id) {
-        return new Response(200, '10 ' . $id);
+        return '10 ' . $id;
     }
 ]);
+
+// Route::get('/user', [UserController::class, 'index']);
 
 $router->get('/user', [
     function () {
