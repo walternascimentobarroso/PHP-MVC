@@ -9,12 +9,6 @@ use ReflectionFunction;
 class Router
 {
     private $routes = [];
-    private $request;
-
-    public function __construct()
-    {
-        $this->request = new Request();
-    }
 
     private function addRoute($method, $route, $params = [])
     {
@@ -48,8 +42,8 @@ class Router
 
     private function getRoute()
     {
-        $uri = $this->request->getUri();
-        $httpMethod = $this->request->getHttpMethod();
+        $uri = $_SERVER['REQUEST_URI'] ?? '';
+        $httpMethod = $_SERVER['REQUEST_METHOD'] ?? '';
 
         foreach ($this->routes as $patternRoute => $methods) {
             if (preg_match($patternRoute, $uri, $matches)) {
@@ -57,7 +51,6 @@ class Router
                     unset($matches[0]);
                     $keys = $methods[$httpMethod]['variables'];
                     $methods[$httpMethod]['variables'] = array_combine($keys, $matches);
-                    $methods[$httpMethod]['variables']['request'] = $this->request;
                     return $methods[$httpMethod];
                 }
                 throw new Exception("Método não permitido", 405);
@@ -70,20 +63,11 @@ class Router
     {
         try {
             $route = $this->getRoute();
-            if (!isset($route['controller'])) {
-                throw new Exception("A URL não pode ser processada", 500);
-            }
-
-            $args = [];
-
-            $reflection = new ReflectionFunction($route['controller']);
-            foreach ($reflection->getParameters() as $parameter) {
-                $name = $parameter->getName();
-                $args[$name] = isset($route['variables'][$name]) ? $route['variables'][$name] : '';
-            }
-
-
-            return call_user_func($route['controller'], $args);
+            $controller = $route[0];
+            $controller_object = new $controller();
+            $action = $route[1];
+            $args = $route['variables'] ?? [];
+            return call_user_func([$controller_object, $action], $args);
         } catch (Exception $e) {
             return new Response($e->getCode(), $e->getMessage());
         }
