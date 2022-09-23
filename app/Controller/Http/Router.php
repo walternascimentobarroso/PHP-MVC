@@ -2,25 +2,19 @@
 
 namespace App\Controller\Http;
 
-use Closure;
 use Exception;
-use ReflectionFunction;
 
 class Router
 {
     private $routes = [];
 
-    private function addRoute($method, $route, $params = [])
+    private function add($method, $route, $params = [])
     {
-        foreach ($params as $key => $value) {
-            if ($value instanceof Closure) {
-                $params['controller'] = $value;
-                unset($params[$key]);
-                continue;
-            }
-        }
-
         $params['variables'] = [];
+        $params['controller'] = $params[0];
+        $params['action'] = $params[1];
+        unset($params[0], $params[1]);
+
         $patternVariable = '/{(.*?)}/';
 
         if (preg_match_all($patternVariable, $route, $matches)) {
@@ -37,7 +31,7 @@ class Router
      */
     public function __call($name, $arguments)
     {
-        return $this->addRoute(strtoupper($name), $arguments[0], $arguments[1]);
+        return $this->add(strtoupper($name), $arguments[0], $arguments[1]);
     }
 
     private function getRoute()
@@ -63,13 +57,14 @@ class Router
     {
         try {
             $route = $this->getRoute();
-            $controller = $route[0];
+            $controller = $route['controller'];
             $controller_object = new $controller();
-            $action = $route[1];
+            $action = $route['action'];
             $args = $route['variables'] ?? [];
             return call_user_func([$controller_object, $action], $args);
         } catch (Exception $e) {
-            return new Response($e->getCode(), $e->getMessage());
+            http_response_code($e->getCode());
+            echo $e->getMessage();
         }
     }
 }
