@@ -6,9 +6,9 @@ use Exception;
 
 class Router
 {
-    private $routes = [];
+    private static $routes = [];
 
-    private function add($method, $route, $params = [])
+    private static function add($method, $route, $params = [])
     {
         $params['variables'] = [];
         $params['controller'] = $params[0];
@@ -23,23 +23,23 @@ class Router
         }
 
         $patternRoute = '/^' . str_replace('/', '\/', $route) . '$/';
-        $this->routes[$patternRoute][$method] = $params;
+        self::$routes[$patternRoute][$method] = $params;
     }
 
     /**
      * Function to add a GET, POST, PUT, DELETE route
      */
-    public function __call($name, $arguments)
+    public static function __callStatic($name, $arguments)
     {
-        return $this->add(strtoupper($name), $arguments[0], $arguments[1]);
+        return self::add(strtoupper($name), $arguments[0], $arguments[1]);
     }
 
-    private function getRoute()
+    private static function getRoute()
     {
         $uri = $_SERVER['REQUEST_URI'] ?? '';
         $httpMethod = $_SERVER['REQUEST_METHOD'] ?? '';
 
-        foreach ($this->routes as $patternRoute => $methods) {
+        foreach (self::$routes as $patternRoute => $methods) {
             if (preg_match($patternRoute, $uri, $matches)) {
                 if (isset($methods[$httpMethod])) {
                     unset($matches[0]);
@@ -53,10 +53,10 @@ class Router
         throw new Exception("Route not found", 404);
     }
 
-    public function run()
+    public static function run()
     {
         try {
-            $route = $this->getRoute();
+            $route = self::getRoute();
             $controller = $route['controller'];
             $controller_object = new $controller();
             $action = $route['action'];

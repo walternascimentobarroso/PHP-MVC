@@ -6,4 +6,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 include __DIR__ . '/../routes/pages.php';
 
-$router->run()->sendResponse();
+use App\Controller\Http\Router;
+
+Router::run();
